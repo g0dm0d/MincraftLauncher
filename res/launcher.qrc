@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="main">
+    <file>back.svg</file>
+    <file>svg.png</file>
+  </qresource>
+</RCC>
