@@ -1,6 +1,5 @@
 <RCC>
-  <qresource prefix="main">
-    <file>back.svg</file>
-    <file>svg.png</file>
+  <qresource prefix="newPrefix">
+    <file>arrow-down-sign-to-navigate.png</file>
   </qresource>
 </RCC>
