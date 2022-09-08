@@ -1,42 +1,21 @@
 from contextlib import redirect_stderr
 import requests
 import json
-from operator import ge
-from selenium import webdriver
-import os
-import platform
+import webbrowser
+import threading
+
+
+from httpserver import mslog
+
 
 def loginmine():
     #MAIN-TOKEN------------------------------------------------------
-    authurl = "https://login.live.com/oauth20_authorize.srf?client_id=1a4b9403-1f4d-46f3-9dcb-08aa6f0667e6&response_type=code&redirect_uri=https://deda-212-34-48-70.eu.ngrok.io&scope=XboxLive.signin%20offline_access&state=NOT_NEEDED"
-
-    firefoxlinux = os.path.join(os.getcwd(), 'res/geckodriver')
-    firefoxwindows = os.path.join(os.getcwd(), 'res/geckodriver.exe')
-
-    if platform.system() == "Linux":
-        driver = webdriver.Firefox(executable_path=firefoxlinux)
-    if platform.system() == "Windows":
-        driver = webdriver.Firefox(executable_path=firefoxwindows)
-
-    try:
-        driver.get(url=authurl)
-        get_url = driver.current_url
-        while "https://login.live.com" in get_url:
-            get_url = driver.current_url
-    except Exception as ex:
-        print(ex)
-    finally:
-        get_url = driver.current_url
-        driver.close()
-        driver.quit()
-    code = get_url.split('/')
-    code = code[-1]
-    code = code[6:-17]
-
+    webbrowser.open('https://login.live.com/oauth20_authorize.srf?client_id=1a4b9403-1f4d-46f3-9dcb-08aa6f0667e6&response_type=code&redirect_uri=http://localhost:8080&scope=XboxLive.signin%20offline_access&state=NOT_NEEDED', new=2)
+    code = mslog()
     #DEFAULT-VARIABLE------------------------------------------------
     client_id='1a4b9403-1f4d-46f3-9dcb-08aa6f0667e6'
     client_secrete = "SUa7Q~fDB1P8JOtUG6mfK8d4A9H_VJLUnmnwF"
-    redirect_uri = 'https://deda-212-34-48-70.eu.ngrok.io'
+    redirect_uri = 'http://localhost:8080'
     #FIRST-TOKEN----------------------------------------------------- MICROSOFT ACC
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
     data = f"client_id={client_id}&client_secret={client_secrete}&code={code}&grant_type=authorization_code&redirect_uri={redirect_uri}"
