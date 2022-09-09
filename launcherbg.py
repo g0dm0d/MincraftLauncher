@@ -1,4 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from authAPI import loginmine
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
 
 
 class Ui_Dialog(object):
@@ -191,6 +195,8 @@ class Ui_Dialog(object):
         self.Play.raise_()
         self.Version.raise_()
 
+        self.Play.clicked.connect(self.loginin)
+
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
@@ -207,6 +213,12 @@ class Ui_Dialog(object):
         self.Skin.setText(_translate("Dialog", "Skins"))
         self.Launchver.setText(_translate("Dialog", "\"Launcher version"))
         self.null_2.setText(_translate("Dialog", "Null"))
+
+    def loginin(self):
+        self.threadpool = QThreadPool()
+        self.threadpool.start(loginmine)
+
+
 import launcher_rc
 
 
@@ -217,4 +229,4 @@ if __name__ == "__main__":
     ui = Ui_Dialog()
     ui.setupUi(Dialog)
     Dialog.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

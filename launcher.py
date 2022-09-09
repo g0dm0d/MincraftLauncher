@@ -1,12 +1,15 @@
 import sqlite3
 import sys
-from os import access
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 from authAPI import loginmine
 from UUID import uuidfinder
 from launcherbg import Ui_Dialog
+
+
+async def test():
+    await loginmine()
 
 
 if __name__ == "__main__":
@@ -16,6 +19,9 @@ if __name__ == "__main__":
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())
+
+
+    ui.Play.clicked.connect(asyncio.run(test()))
 
 
     con = sqlite3.connect('enelix.db')
