@@ -1,8 +1,6 @@
 import socketserver
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler
 import threading
-from socket import SOL_SOCKET,SO_REUSEADDR
-import time
 
 
 def mslog():
@@ -12,12 +10,13 @@ def mslog():
         def do_GET(self):
             global code
             code = self.path[7:-17]
+            self.wfile.write(b'Done, u can close browser')
 
 
     class HTTPServer():
         def start(self):        
             self.run = True     
-            self.httpd = socketserver.TCPServer(("localhost", 8080), Handler)
+            self.httpd = socketserver.TCPServer(("localhost", 9397), Handler)
             self.thread = threading.Thread(target = self._serve)
             self.thread.start()
         def _serve(self):        

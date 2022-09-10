@@ -1,8 +1,10 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from authAPI import loginmine
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+
+
+from tools.accounts.auth import addAccount
 
 
 class Ui_Dialog(object):
@@ -21,25 +23,25 @@ class Ui_Dialog(object):
         Dialog.setWindowIcon(icon)
         Dialog.setAutoFillBackground(False)
         Dialog.setStyleSheet("#comboBox{\n"
-"    border: 0px     solid #ced4da;\n"
-"    border-radius: 4px;\n"
-"    padding-left:  10px;\n"
-"}\n"
-"\n"
-"#comboBox::drop-down{\n"
-"    border:0px;\n"
-"}\n"
-"\n"
-"#comboBox::down-arrow{\n"
-"    image: url(:/newPrefix/arrow-down-sign-to-navigate.png);\n"
-"    width: 12px;\n"
-"     height: 12px;\n"
-"    margin-right:  15px;\n"
-"}\n"
-"\n"
-"#comboBox:on {\n"
-"    border: 0px solid #c2dbfe;\n"
-"}")
+            "    border: 0px     solid #ced4da;\n"
+            "    border-radius: 4px;\n"
+            "    padding-left:  10px;\n"
+            "}\n"
+            "\n"
+            "#comboBox::drop-down{\n"
+            "    border:0px;\n"
+            "}\n"
+            "\n"
+            "#comboBox::down-arrow{\n"
+            "    image: url(:/newPrefix/arrow-down-sign-to-navigate.png);\n"
+            "    width: 12px;\n"
+            "     height: 12px;\n"
+            "    margin-right:  15px;\n"
+            "}\n"
+            "\n"
+            "#comboBox:on {\n"
+            "    border: 0px solid #c2dbfe;\n"
+            "}")
         Dialog.setSizeGripEnabled(False)
         Dialog.setModal(False)
         self.Play = QtWidgets.QPushButton(Dialog)
@@ -50,11 +52,11 @@ class Ui_Dialog(object):
         font.setBold(False)
         self.Play.setFont(font)
         self.Play.setStyleSheet("background-color: rgb(0, 139, 68);\n"
-"border-radius: 13px; \n"
-"border-width: 3px;\n"
-"border-style: solid;\n"
-"\n"
-"")
+            "border-radius: 13px; \n"
+            "border-width: 3px;\n"
+            "border-style: solid;\n"
+            "\n"
+            "")
         self.Play.setObjectName("Play")
         self.Mods = QtWidgets.QToolButton(Dialog)
         self.Mods.setGeometry(QtCore.QRect(340, 120, 81, 36))
@@ -80,25 +82,25 @@ class Ui_Dialog(object):
         font.setBold(True)
         self.Language.setFont(font)
         self.Language.setStyleSheet("#Language{\n"
-"    border: 0px     solid #ced4da;\n"
-"    border-radius: 4px;\n"
-"    padding-left:  10px;\n"
-"}\n"
-"\n"
-"#Language::drop-down{\n"
-"    border:0px;\n"
-"}\n"
-"\n"
-"#Language::down-arrow{\n"
-"    image: url(:/newPrefix/arrow-down-sign-to-navigate.png);\n"
-"    width: 12px;\n"
-"     height: 12px;\n"
-"    margin-right:  15px;\n"
-"}\n"
-"\n"
-"#Language:on {\n"
-"    border: 0px solid #c2dbfe;\n"
-"}")
+            "    border: 0px     solid #ced4da;\n"
+            "    border-radius: 4px;\n"
+            "    padding-left:  10px;\n"
+            "}\n"
+            "\n"
+            "#Language::drop-down{\n"
+            "    border:0px;\n"
+            "}\n"
+            "\n"
+            "#Language::down-arrow{\n"
+            "    image: url(:/newPrefix/arrow-down-sign-to-navigate.png);\n"
+            "    width: 12px;\n"
+            "     height: 12px;\n"
+            "    margin-right:  15px;\n"
+            "}\n"
+            "\n"
+            "#Language:on {\n"
+            "    border: 0px solid #c2dbfe;\n"
+            "}")
         self.Language.setObjectName("Language")
         self.Language.addItem("")
         self.Language.addItem("")
@@ -110,25 +112,25 @@ class Ui_Dialog(object):
         font.setBold(True)
         self.Login.setFont(font)
         self.Login.setStyleSheet("#Login{\n"
-"    border: 0px     solid #ced4da;\n"
-"    border-radius: 4px;\n"
-"    padding-left:  10px;\n"
-"}\n"
-"\n"
-"#Login::drop-down{\n"
-"    border:0px;\n"
-"}\n"
-"\n"
-"#Login::down-arrow{\n"
-"    image: url(:/newPrefix/arrow-down-sign-to-navigate.png);\n"
-"    width: 12px;\n"
-"     height: 12px;\n"
-"    margin-right:  15px;\n"
-"}\n"
-"\n"
-"#Login:on {\n"
-"    border: 0px solid #c2dbfe;\n"
-"}")
+            "    border: 0px     solid #ced4da;\n"
+            "    border-radius: 4px;\n"
+            "    padding-left:  10px;\n"
+            "}\n"
+            "\n"
+            "#Login::drop-down{\n"
+            "    border:0px;\n"
+            "}\n"
+            "\n"
+            "#Login::down-arrow{\n"
+            "    image: url(:/newPrefix/arrow-down-sign-to-navigate.png);\n"
+            "    width: 12px;\n"
+            "     height: 12px;\n"
+            "    margin-right:  15px;\n"
+            "}\n"
+            "\n"
+            "#Login:on {\n"
+            "    border: 0px solid #c2dbfe;\n"
+            "}")
         self.Login.setObjectName("Login")
         self.Login.addItem("")
         self.Settings = QtWidgets.QToolButton(Dialog)
@@ -167,25 +169,25 @@ class Ui_Dialog(object):
         sizePolicy.setHeightForWidth(self.Version.sizePolicy().hasHeightForWidth())
         self.Version.setSizePolicy(sizePolicy)
         self.Version.setStyleSheet("#Version{\n"
-"    border: 0px     solid #ced4da;\n"
-"    border-radius: 4px;\n"
-"    padding-left:  10px;\n"
-"}\n"
-"\n"
-"#Version::drop-down{\n"
-"    border:0px;\n"
-"}\n"
-"\n"
-"#Version::down-arrow{\n"
-"    image: url(:/newPrefix/arrow-down-sign-to-navigate.png);\n"
-"    width: 12px;\n"
-"     height: 12px;\n"
-"    margin-right:  15px;\n"
-"}\n"
-"\n"
-"#Version:on {\n"
-"    border: 0px solid #c2dbfe;\n"
-"}")
+            "    border: 0px     solid #ced4da;\n"
+            "    border-radius: 4px;\n"
+            "    padding-left:  10px;\n"
+            "}\n"
+            "\n"
+            "#Version::drop-down{\n"
+            "    border:0px;\n"
+            "}\n"
+            "\n"
+            "#Version::down-arrow{\n"
+            "    image: url(:/newPrefix/arrow-down-sign-to-navigate.png);\n"
+            "    width: 12px;\n"
+            "     height: 12px;\n"
+            "    margin-right:  15px;\n"
+            "}\n"
+            "\n"
+            "#Version:on {\n"
+            "    border: 0px solid #c2dbfe;\n"
+            "}")
         self.Version.setObjectName("Version")
         self.widget_2.raise_()
         self.widget.raise_()
@@ -194,8 +196,6 @@ class Ui_Dialog(object):
         self.Skin.raise_()
         self.Play.raise_()
         self.Version.raise_()
-
-        self.Play.clicked.connect(self.loginin)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -215,8 +215,12 @@ class Ui_Dialog(object):
         self.null_2.setText(_translate("Dialog", "Null"))
 
     def loginin(self):
+        nick = "test" # get from UI
         self.threadpool = QThreadPool()
-        self.threadpool.start(loginmine)
+        self.threadpool.start(addAccount(nick))
+
+    def setupButtons(self, Dialog):
+        self.Play.clicked.connect(self.loginin)
 
 
 import launcher_rc
@@ -228,5 +232,6 @@ if __name__ == "__main__":
     Dialog = QtWidgets.QDialog()
     ui = Ui_Dialog()
     ui.setupUi(Dialog)
+    ui.setupButtons(Dialog)
     Dialog.show()
     sys.exit(app.exec())
