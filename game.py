@@ -2,10 +2,16 @@ import json
 import os
 import platform
 from pathlib import Path
+import resource
 import subprocess
 from sys import argv
 
-versionlaun, usernamelaun, uuidlaun, accessTokenlaun = argv
+#version, username, uuid, token = argv
+version = 'fabric-loader-0.14.9-1.18.1'
+username = 'test'
+uuid = 'test'
+token = 'test'
+name = 'test'
 
 def debug(str):
     if os.getenv('DEBUG') != None:
@@ -23,12 +29,7 @@ def get_natives_string(lib):
     nativesFile=""
     if not "natives" in lib:
         return nativesFile
-
-    if "windows" in lib["natives"] and platform.system() == 'Windows':
-        nativesFile = lib["natives"]["windows"].replace("${arch}", arch)
-    elif "osx" in lib["natives"] and platform.system() == 'Darwin':
-        nativesFile = lib["natives"]["osx"].replace("${arch}", arch)
-    elif "linux" in lib["natives"] and platform.system() == "Linux":
+    if "linux" in lib["natives"] and platform.system() == "Linux":
         nativesFile = lib["natives"]["linux"].replace("${arch}", arch)
     else:
         raise Exception("Platform not supported")
@@ -76,8 +77,7 @@ def get_classpath(lib, mcDir):
     for i in lib["libraries"]:
         if not should_use_library(i):
             continue
-
-        libDomain, libName, libVersion = i["name"].split(":")
+        libDomain, libName, libVersion, *a = i["name"].split(":")
         jarPath = os.path.join(mcDir, "libraries", *
                                libDomain.split('.'), libName, libVersion)
 
@@ -85,56 +85,56 @@ def get_classpath(lib, mcDir):
         jarFile = libName + "-" + libVersion + ".jar"
         if native != "":
             jarFile = libName + "-" + libVersion + "-" + native + ".jar"
-
         cp.append(os.path.join(jarPath, jarFile))
 
     cp.append(os.path.join(mcDir, "versions", lib["id"], f'{lib["id"]}.jar'))
 
     return os.pathsep.join(cp)
 
-version = versionlaun
-username = usernamelaun
-uuid = uuidlaun
-accessToken = accessTokenlaun
-
-mcDir = os.path.join(os.getenv('HOME'), '.minecraft')
-nativesDir = os.path.join(os.getenv('HOME'), 'versions', version, 'natives')
+# i["downloads"]['artifact']['url'].split("/")
 clientJson = json.loads(
-    Path(os.path.join(mcDir, 'versions', version, f'{version}.json')).read_text())
-classPath = get_classpath(clientJson, mcDir)
-mainClass = clientJson['mainClass']
-versionType = clientJson['type']
-assetIndex = clientJson['assetIndex']['id']
+    Path(os.path.join(os.getenv('HOME'), '.cobalt', f'{name}.json')).read_text())
+mcDir = clientJson[0]['location']
+resDir = os.path.join(os.getenv('HOME'), '.cobalt')
+nativesDir = os.path.join(resDir, 'versions', version, 'natives')
+versionJson = json.loads(
+    Path(os.path.join(resDir, 'versions', version, f'{version}.json')).read_text())
+classPath = get_classpath(versionJson, resDir)
+mainClass = versionJson['mainClass']
+versionType = versionJson['type']
+arguments=[clientJson[0]['arguments']]
+try:
+    dependence = versionJson['inheritsFrom']
+    arguments+=versionJson['arguments']['game']
+    mainJson = json.loads(
+    Path(os.path.join(resDir, 'versions', dependence, f'{dependence}.json')).read_text())
+    assetIndex = mainJson['assetIndex']['id']
+    classPath = get_classpath(mainJson, resDir) + ':' + classPath
+    classPath = classPath.replace(f':/home/godmod/.cobalt/versions/{dependence}/{dependence}.jar', '')
+except:
+    assetIndex = versionJson['assetIndex']['id']
 
 debug(classPath)
 debug(mainClass)
 debug(versionType)
 debug(assetIndex)
 
-subprocess.call([
-    '/usr/bin/java',
+minecraft = ['/usr/bin/java',
     f'-Djava.library.path={nativesDir}',
     '-Dminecraft.launcher.brand=custom-launcher',
     '-Dminecraft.launcher.version=2.1',
     '-cp',
-    classPath,
-    'net.minecraft.client.main.Main',
-    '--username',
-    username,
-    '--version',
-    version,
-    '--gameDir',
-    mcDir,
-    '--assetsDir',
-    os.path.join(mcDir, 'assets'),
-    '--assetIndex',
-    assetIndex,
-    '--uuid',
-    uuid,
-    '--accessToken',
-    accessToken,
-    '--userType',
-    'legacy',
-    '--versionType',
-    'release'
-])
+    classPath, 
+    mainClass,
+    '--username', username, 
+    '--version', version, 
+    '--gameDir', mcDir, 
+    '--assetsDir', os.path.join(resDir, 'assets'),
+    '--assetIndex', assetIndex, 
+    '--uuid', uuid,
+    '--accessToken', token,
+    '--userType', 'microsoft',
+    '--versionType', 'release',
+]
+print(minecraft + arguments)
+subprocess.call(minecraft + arguments)

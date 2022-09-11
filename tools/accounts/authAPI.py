@@ -1,4 +1,3 @@
-from contextlib import redirect_stderr
 import requests
 import json
 import webbrowser

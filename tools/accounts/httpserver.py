@@ -5,13 +5,13 @@ import threading
 
 def mslog():
     global code
-    code = ""
+    code = ''
+
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self):
             global code
             code = self.path[7:-17]
             self.wfile.write(b'Done, u can close browser')
-
 
     class HTTPServer():
         def start(self):        
@@ -30,5 +30,6 @@ def mslog():
     server.start()
     while(int(len(code)) == 0):
         pass
+
     server.stop()
     return(code)

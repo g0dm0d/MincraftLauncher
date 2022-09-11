@@ -1,14 +1,15 @@
 import sqlite3
+import os
 
 
-from .UUID import uuidfinder
+from .accountInfo import accountinfo 
 from .authAPI import msauth
 
 
-def addAccount(nick):
-    con = sqlite3.connect("tutorial.db")
+def addAccount():
+    con = sqlite3.connect(os.path.dirname(__file__)+'/accounts.db')
     cur = con.cursor()
     token = msauth()
-    uuid = uuidfinder(nick)
+    uuid, nick = accountinfo(token)
     cur.execute(f"INSERT INTO accounts (username, uuid, accessToken) VALUES ('{nick}', '{uuid}', '{token}')")
     con.commit()

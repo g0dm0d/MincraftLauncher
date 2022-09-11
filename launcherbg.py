@@ -1,3 +1,5 @@
+import sqlite3
+import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -215,12 +217,19 @@ class Ui_Dialog(object):
         self.null_2.setText(_translate("Dialog", "Null"))
 
     def loginin(self):
-        nick = "test" # get from UI
         self.threadpool = QThreadPool()
-        self.threadpool.start(addAccount(nick))
+        self.threadpool.start(addAccount)
 
-    def setupButtons(self, Dialog):
+    def setupButtons(self):
         self.Play.clicked.connect(self.loginin)
+
+    def accountscheck(self):
+        con = sqlite3.connect("tools/accounts/accounts.db")
+        cur = con.cursor()
+        cur.execute("SELECT username FROM accounts")
+        rows = cur.fetchall()
+        for row in rows:
+            self.Login.addItem(row[0])
 
 
 import launcher_rc
@@ -232,6 +241,7 @@ if __name__ == "__main__":
     Dialog = QtWidgets.QDialog()
     ui = Ui_Dialog()
     ui.setupUi(Dialog)
-    ui.setupButtons(Dialog)
+    ui.setupButtons()
+    ui.accountscheck()
     Dialog.show()
     sys.exit(app.exec())
