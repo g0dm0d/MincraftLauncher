@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="newPrefix">
+    <file>arrow-down-sign-to-navigate.png</file>
+  </qresource>
+</RCC>

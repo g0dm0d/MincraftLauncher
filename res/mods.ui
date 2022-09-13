@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>877</width>
+    <height>731</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QLineEdit" name="lineEdit">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>160</y>
+     <width>171</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit
+{
+	border: 2px solid  rgb(62, 67, 75);
+   border-radius: 5%;
+	color: white;
+	padding-left:25px;
+	padding-right:25px;
+	backgroud-color:rgb(255, 255, 255);
+}
+</string>
+   </property>
+   <property name="placeholderText">
+    <string>Search..</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="comboBox">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>160</y>
+     <width>87</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#comboBox{
+    border: 0px     solid #ced4da;
+    border-radius: 4px;
+    padding-left:  10px;
+}
+
+#comboBox::drop-down{
+    border:0px;
+}
+
+#comboBox::down-arrow{
+    image: url(:/newPrefix/arrow-down-sign-to-navigate.png);
+    width: 12px;
+     height: 12px;
+    margin-right:  15px;
+}
+
+#comboBox:on {
+    border: 0px solid #c2dbfe;
+}</string>
+   </property>
+   <property name="placeholderText">
+    <string>Version</string>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="listWidget">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>260</y>
+     <width>811</width>
+     <height>441</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>163</y>
+     <width>51</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton
+{
+	border: -0;
+
+	color: white;
+	padding-left:20px;
+	padding-right:20px;
+	backgroud-color:rgb(255, 255, 255);
+}
+</string>
+   </property>
+   <property name="text">
+    <string>🔍</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>10</y>
+     <width>391</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Mod manager design will be better in the future</string>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="Downloads/name.qrc"/>
+ </resources>
+ <connections/>
+</ui>

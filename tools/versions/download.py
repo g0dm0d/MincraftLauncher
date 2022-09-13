@@ -5,6 +5,7 @@ from pathlib import Path
 
 
 def download(link, file_name, path):
+    print('XD')
     Path(path).mkdir(parents=True, exist_ok=True)
     if not os.path.exists(Path(os.path.join(path, file_name))):
         with open(os.path.join(path, file_name), "wb") as f:
