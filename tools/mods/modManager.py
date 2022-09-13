@@ -10,12 +10,11 @@ from ..versions.download import download
 
 def searchMod(mod, profile):
     version = versionJson(profile)
-    print(version)
     req = requests.get(f'https://api.modrinth.com/v2/search?limit=20&index=relevance&query={mod}&facets=[["categories:\'fabric\'"],["project_type:mod"],["versions:{version}"]]')
     modsFind = req.json()
     modList = []
     for mods in modsFind['hits']:
-        modList.append([mods['title'], mods['slug']])
+        modList.append([mods['title'], mods['slug'], mods['icon_url']])
     return modList
 
 

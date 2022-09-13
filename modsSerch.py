@@ -9,7 +9,10 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QThreadPool, QThread
+from PyQt5.QtCore import QThreadPool
+from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtWidgets import QLabel
+import requests
 
 
 from tools.mods.modManager import searchMod
@@ -30,7 +33,7 @@ class Ui_Form(object):
         self.Searcbar.setStyleSheet("QLineEdit\n"
             "{\n"
             "    border: 2px solid  rgb(62, 67, 75);\n"
-            "   border-radius: 5%;\n"
+            "    border-radius: 5%;\n"
             "    color: white;\n"
             "    padding-left:25px;\n"
             "    padding-right:25px;\n"
@@ -97,13 +100,20 @@ class Ui_Form(object):
         self.threadpool = QThreadPool()
         self.threadpool.globalInstance().start(lambda: downloadMod(mod, self.comboBox.currentText()))
 
-    def add_card(self, name, modid):
+    def add_card(self, name, modid, url):
         itemN = QtWidgets.QListWidgetItem() 
-        #Create widget
         widget = QtWidgets.QWidget()
+        image = QImage()
+        if len(url) != 0:
+            image.loadFromData(requests.get(url).content)
+        image = circleImage(image)
+        image_label = QLabel()
+        image_label.setPixmap(QPixmap(image).scaled(48, 48))
+
         widgetText =  QtWidgets.QLabel(name)
         widgetButton =  QtWidgets.QPushButton("Download")
         widgetLayout = QtWidgets.QHBoxLayout()
+        widgetLayout.addWidget(image_label)
         widgetLayout.addWidget(widgetText)
         widgetLayout.addWidget(widgetButton)
         widgetLayout.addStretch()
@@ -124,12 +134,32 @@ class Ui_Form(object):
         textboxValue = self.Searcbar.text()
         modsList = searchMod(textboxValue, version)
         for i in modsList:
-            self.add_card(i[0],i[1])
+            self.add_card(i[0],i[1],i[2])
 
     def scanVer(self):
         for version in versionList():
             self.comboBox.addItem(version)
             self.comboBox.setCurrentText(version)
+
+
+def circleImage(imagePath):
+    source = QtGui.QPixmap(imagePath)
+    size = min(source.width(), source.height())
+
+    target = QtGui.QPixmap(size, size)
+    target.fill(QtCore.Qt.transparent)
+
+    qp = QtGui.QPainter(target)
+    qp.setRenderHints(qp.Antialiasing, True)
+    path = QtGui.QPainterPath()
+    path.addRoundedRect(QtCore.QRectF(target.rect()), 50, 50)
+    qp.setClipPath(path)
+
+    sourceRect = QtCore.QRect(0, 0, size, size)
+    sourceRect.moveCenter(source.rect().center())
+    qp.drawPixmap(target.rect(), source, sourceRect)
+    qp.end()
+    return target
 
 
 if __name__ == "__main__":
