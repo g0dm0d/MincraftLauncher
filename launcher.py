@@ -1,15 +1,15 @@
 import sqlite3
 import os
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+from PyQt5.QtCore import QThreadPool
 
 
 from tools.accounts.auth import addAccount
 
 
 class Ui_Dialog(object):
+    def __init__(self):
+        self.threadpool = QThreadPool()
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.setWindowModality(QtCore.Qt.NonModal)
@@ -217,7 +217,6 @@ class Ui_Dialog(object):
         self.null_2.setText(_translate("Dialog", "Null"))
 
     def loginin(self):
-        self.threadpool = QThreadPool()
         self.threadpool.start(addAccount)
 
     def setupButtons(self):
