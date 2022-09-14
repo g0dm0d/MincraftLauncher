@@ -18,9 +18,10 @@ import requests
 from tools.mods.modManager import searchMod
 from tools.versions.minecraftConf import versionList
 from tools.mods.modManager import downloadMod
+from modsManager import ModsManagerUI
 
 
-class Ui_Form(object):
+class ModsSearchUI(object):
     def __init__(self):
         self.threadpool = QThreadPool()
     def setupUi(self, Form):
@@ -85,12 +86,38 @@ class Ui_Form(object):
         self.label.setGeometry(QtCore.QRect(0, 10, 391, 20))
         self.label.setObjectName("label")
 
+        self.modsManager = QtWidgets.QToolButton(Form)
+        self.modsManager.setGeometry(QtCore.QRect(460, 160, 87, 34))
+        self.modsManager.setStyleSheet("#comboBox{\n"
+            "    border: 0px     solid #ced4da;\n"
+            "    border-radius: 4px;\n"
+            "    padding-left:  10px;\n"
+            "}\n"
+            "\n"
+            "#comboBox::drop-down{\n"
+            "    border:0px;\n"
+            "}\n"
+            "\n"
+            "#comboBox::down-arrow{\n"
+            "    image: url(:/newPrefix/arrow-down-sign-to-navigate.png);\n"
+            "    width: 12px;\n"
+            "     height: 12px;\n"
+            "    margin-right:  15px;\n"
+            "}\n"
+            "\n"
+            "#comboBox:on {\n"
+            "    border: 0px solid #c2dbfe;\n"
+            "}")
+        self.modsManager.setObjectName("modsManager")
+        self.modsManager.clicked.connect(lambda: self.modsmanagerUI())
+
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
+        self.modsManager.setText(_translate("Dialog", "Mods manager"))
         self.Searcbar.setPlaceholderText(_translate("Form", "Search.."))
         self.comboBox.setPlaceholderText(_translate("Form", "Version"))
         self.pushButton.setText(_translate("Form", "🔍"))
@@ -106,7 +133,7 @@ class Ui_Form(object):
         image = QImage()
         if len(url) != 0:
             image.loadFromData(requests.get(url).content)
-        image = circleImage(image)
+        image = image
         image_label = QLabel()
         image_label.setPixmap(QPixmap(image).scaled(48, 48))
 
@@ -122,7 +149,6 @@ class Ui_Form(object):
         widget.setLayout(widgetLayout)  
         itemN.setSizeHint(widget.sizeHint())    
         
-        #Add widget to QListWidget funList
         self.listWidget.addItem(itemN)
         self.listWidget.setItemWidget(itemN, widget)
         
@@ -141,33 +167,9 @@ class Ui_Form(object):
             self.comboBox.addItem(version)
             self.comboBox.setCurrentText(version)
 
-
-def circleImage(imagePath):
-    source = QtGui.QPixmap(imagePath)
-    size = min(source.width(), source.height())
-
-    target = QtGui.QPixmap(size, size)
-    target.fill(QtCore.Qt.transparent)
-
-    qp = QtGui.QPainter(target)
-    qp.setRenderHints(qp.Antialiasing, True)
-    path = QtGui.QPainterPath()
-    path.addRoundedRect(QtCore.QRectF(target.rect()), 50, 50)
-    qp.setClipPath(path)
-
-    sourceRect = QtCore.QRect(0, 0, size, size)
-    sourceRect.moveCenter(source.rect().center())
-    qp.drawPixmap(target.rect(), source, sourceRect)
-    qp.end()
-    return target
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    Form = QtWidgets.QWidget()
-    ui = Ui_Form()
-    ui.setupUi(Form)
-    ui.scanVer()
-    Form.show()
-    sys.exit(app.exec_())
+    def modsmanagerUI(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = ModsManagerUI()
+        self.ui.profile = self.comboBox.currentText()
+        self.ui.setupUi(self.window)
+        self.window.show()

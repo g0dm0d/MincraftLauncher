@@ -30,6 +30,12 @@ def versionJson(name):
     return(mainJson[0]['version'])
 
 
+def locationJson(name):
+    mainJson = json.loads(
+        Path(os.path.join(mcDir, f'{name}.json')).read_text())
+    return(mainJson[0]['location'])
+
+
 def versionList():
     filelist= [file[:-5] for file in os.listdir(mcDir) if file.endswith('.json')]
     return filelist

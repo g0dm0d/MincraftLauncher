@@ -5,6 +5,8 @@ from PyQt5.QtCore import QThreadPool
 
 
 from tools.accounts.auth import addAccount
+from modsSerch import ModsSearchUI
+from tools.versions.minecraftConf import versionList
 
 
 class Ui_Dialog(object):
@@ -191,6 +193,9 @@ class Ui_Dialog(object):
             "    border: 0px solid #c2dbfe;\n"
             "}")
         self.Version.setObjectName("Version")
+
+        self.Mods.clicked.connect(lambda: self.modsUI())
+
         self.widget_2.raise_()
         self.widget.raise_()
         self.Mods.raise_()
@@ -230,6 +235,18 @@ class Ui_Dialog(object):
         for row in rows:
             self.Login.addItem(row[0])
 
+    def version(self):
+        for version in versionList():
+            self.Version.addItem(version)
+            self.Version.setCurrentText(version)
+
+    def modsUI(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = ModsSearchUI()
+        self.ui.setupUi(self.window)
+        self.ui.scanVer()
+        self.window.show()
+
 
 import launcher_rc
 
@@ -242,5 +259,6 @@ if __name__ == "__main__":
     ui.setupUi(Dialog)
     ui.setupButtons()
     ui.accountscheck()
+    ui.version()
     Dialog.show()
     sys.exit(app.exec())
