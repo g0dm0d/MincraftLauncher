@@ -1,5 +1,7 @@
 import requests
 import json
+import sqlite3
+import os
 
 
 def accountinfo(token):
@@ -10,3 +12,12 @@ def accountinfo(token):
     uuid = parsed["id"]
     nick = parsed["name"]
     return uuid, nick
+
+
+def getInfo(username):
+    con = sqlite3.connect(os.path.dirname(__file__)+'/accounts.db')
+    cur = con.cursor()
+    cur.execute(f"SELECT * FROM accounts WHERE username = '{username}'")
+    rows = cur.fetchall()
+    for row in rows:
+        return row[0], row[1], row[2]

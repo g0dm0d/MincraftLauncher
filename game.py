@@ -2,16 +2,14 @@ import json
 import os
 import platform
 from pathlib import Path
-import resource
 import subprocess
 from sys import argv
 
-#version, username, uuid, token = argv
-version = 'fabric-loader-0.14.9-1.18.1'
-username = 'test'
-uuid = 'test'
-token = 'test'
-name = 'test'
+#version = 'fabric-loader-0.14.9-1.18.1'
+#username = 'test'
+#uuid = 'test'
+#token = 'test'
+#name = 'test'
 
 def debug(str):
     if os.getenv('DEBUG') != None:
@@ -92,49 +90,50 @@ def get_classpath(lib, mcDir):
     return os.pathsep.join(cp)
 
 # i["downloads"]['artifact']['url'].split("/")
-clientJson = json.loads(
-    Path(os.path.join(os.getenv('HOME'), '.cobalt', f'{name}.json')).read_text())
-mcDir = clientJson[0]['location']
-resDir = os.path.join(os.getenv('HOME'), '.cobalt')
-nativesDir = os.path.join(resDir, 'versions', version, 'natives')
-versionJson = json.loads(
-    Path(os.path.join(resDir, 'versions', version, f'{version}.json')).read_text())
-classPath = get_classpath(versionJson, resDir)
-mainClass = versionJson['mainClass']
-versionType = versionJson['type']
-arguments=[clientJson[0]['arguments']]
-try:
-    dependence = versionJson['inheritsFrom']
-    arguments+=versionJson['arguments']['game']
-    mainJson = json.loads(
-    Path(os.path.join(resDir, 'versions', dependence, f'{dependence}.json')).read_text())
-    assetIndex = mainJson['assetIndex']['id']
-    classPath = get_classpath(mainJson, resDir) + ':' + classPath
-    classPath = classPath.replace(f':/home/godmod/.cobalt/versions/{dependence}/{dependence}.jar', '')
-except:
-    assetIndex = versionJson['assetIndex']['id']
+def run(username, uuid, token, name):
+    clientJson = json.loads(
+        Path(os.path.join(os.getenv('HOME'), '.cobalt', f'{name}.json')).read_text())
+    version=clientJson[0]['runner'][:-4]
+    mcDir = clientJson[0]['location']
+    resDir = os.path.join(os.getenv('HOME'), '.cobalt')
+    nativesDir = os.path.join(resDir, 'versions', version, 'natives')
+    versionJson = json.loads(
+        Path(os.path.join(resDir, 'versions', version, f'{version}.json')).read_text())
+    classPath = get_classpath(versionJson, resDir)
+    mainClass = versionJson['mainClass']
+    versionType = versionJson['type']
+    arguments=[clientJson[0]['arguments']]
+    try:
+        dependence = versionJson['inheritsFrom']
+        arguments+=versionJson['arguments']['game']
+        mainJson = json.loads(
+        Path(os.path.join(resDir, 'versions', dependence, f'{dependence}.json')).read_text())
+        assetIndex = mainJson['assetIndex']['id']
+        classPath = get_classpath(mainJson, resDir) + ':' + classPath
+        classPath = classPath.replace(f':/home/godmod/.cobalt/versions/{dependence}/{dependence}.jar', '')
+    except:
+        assetIndex = versionJson['assetIndex']['id']
 
-debug(classPath)
-debug(mainClass)
-debug(versionType)
-debug(assetIndex)
+    debug(classPath)
+    debug(mainClass)
+    debug(versionType)
+    debug(assetIndex)
 
-minecraft = ['/usr/bin/java',
-    f'-Djava.library.path={nativesDir}',
-    '-Dminecraft.launcher.brand=custom-launcher',
-    '-Dminecraft.launcher.version=2.1',
-    '-cp',
-    classPath, 
-    mainClass,
-    '--username', username, 
-    '--version', version, 
-    '--gameDir', mcDir, 
-    '--assetsDir', os.path.join(resDir, 'assets'),
-    '--assetIndex', assetIndex, 
-    '--uuid', uuid,
-    '--accessToken', token,
-    '--userType', 'microsoft',
-    '--versionType', 'release',
-]
-print(minecraft + arguments)
-subprocess.call(minecraft + arguments)
+    minecraft = ['/usr/bin/java',
+        f'-Djava.library.path={nativesDir}',
+        '-Dminecraft.launcher.brand=custom-launcher',
+        '-Dminecraft.launcher.version=2.1',
+        '-cp',
+        classPath, 
+        mainClass,
+        '--username', username, 
+        '--version', version, 
+        '--gameDir', mcDir, 
+        '--assetsDir', os.path.join(resDir, 'assets'),
+        '--assetIndex', assetIndex, 
+        '--uuid', uuid,
+        '--accessToken', token,
+        '--userType', 'microsoft',
+        '--versionType', 'release',
+    ]
+    subprocess.call(minecraft + arguments)

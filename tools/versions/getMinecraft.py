@@ -20,20 +20,28 @@ def mineverjson(version):
             return i['url']
 
 
+def getVersion():
+    req = requests.get('https://launchermeta.mojang.com/mc/game/version_manifest_v2.json')
+    clientJson = req.json()
+    versionlist = [version['id'] for version in clientJson['versions'] if version['type'] == 'release']
+    return versionlist
+
+
+
 def minejson(jsonfile, path):
     download(jsonfile, filename(jsonfile), path)
 
 
-def downloadObjects(jsonfile): # hash
+def downloadObjects(jsonfile, callback = None): # hash
     path = Path(os.path.join(os.getenv('HOME'), '.cobalt', 'assets', 'objects'))
     for file in jsonfile['objects']:
         hash = jsonfile['objects'][file]['hash']
         filePath = Path(os.path.join(path, hash[:2]))
         if not Path(os.path.join(filePath, hash)).exists():
-            download(f'http://resources.download.minecraft.net/{hash[:2]}/{hash}', hash, filePath)
+            download(f'http://resources.download.minecraft.net/{hash[:2]}/{hash}', hash, filePath, callback = callback)
 
 
-def downloadLib(jsonfile):
+def downloadLib(jsonfile, callback = None):
     path = Path(os.path.join(os.getenv('HOME'), '.cobalt', 'libraries'))
     for file in jsonfile['libraries']:
         libPath = file['downloads']['artifact']['path'].split('/')[:-1]
@@ -43,6 +51,6 @@ def downloadLib(jsonfile):
             download(file['downloads']['artifact']['url'], fileName, filePath)
         if 'classifiers' in file['downloads']:
             if 'natives-linux' in file['downloads']['classifiers']:
-                download(file['downloads']['artifact']['url'][:-4]+'-natives-linux.jar', fileName[:-4]+'-natives-linux.jar', filePath)
+                download(file['downloads']['artifact']['url'][:-4]+'-natives-linux.jar', fileName[:-4]+'-natives-linux.jar', filePath, callback = callback)
 
 #"https://launchermeta.mojang.com/mc/game/version_manifest_v2.json").json()["latest"]

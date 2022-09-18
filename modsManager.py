@@ -10,54 +10,49 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QThreadPool
-from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QLabel
 
 
-from tools.mods.modManager import listMod, toogleMod
+from tools.mods.modManager import listMod, toogleMod, modStatus
 
 
 class ModsManagerUI(object):
     profile = ''
+
+
+    def on_click(self, mod):
+        toogleMod(mod, self.profile)
+
+
     def setupUi(self, Form):
-        Form.setObjectName("Mod installer")
+        Form.setObjectName("Mod manager")
         Form.resize(877, 731)
         self.listWidget = QtWidgets.QListWidget(Form)
         self.listWidget.setGeometry(QtCore.QRect(40, 260, 811, 441))
         self.listWidget.setObjectName("listWidget")
-        self.label = QtWidgets.QLabel(Form)
-        self.label.setGeometry(QtCore.QRect(40, 20, 300, 441))
-        self.label.setStyleSheet("QLabel{font-size: 18pt;}")
-        self.label.setObjectName("label")
-
-
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
 
-    def add_card(self, mod):
+    def add_card(self, name):
         itemN = QtWidgets.QListWidgetItem() 
         widget = QtWidgets.QWidget()
-
-        widgetText =  QtWidgets.QLabel('aboba')
-        widgetButton =  QtWidgets.QPushButton("Download")
+        widgetText =  QtWidgets.QLabel(name)
+        widgetButton =  QtWidgets.QCheckBox()
         widgetLayout = QtWidgets.QHBoxLayout()
-        widgetLayout.addWidget(widgetText)
         widgetLayout.addWidget(widgetButton)
+        widgetLayout.addWidget(widgetText)
         widgetLayout.addStretch()
-        
         widgetLayout.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
         widget.setLayout(widgetLayout)  
-        itemN.setSizeHint(widget.sizeHint())    
-        
+        itemN.setSizeHint(widget.sizeHint())
+        widgetButton.setChecked(modStatus(name, self.profile))
+        widgetButton.stateChanged.connect(lambda: self.on_click(name))
         self.listWidget.addItem(itemN)
         self.listWidget.setItemWidget(itemN, widget)
         
-        #widgetButton.clicked.connect(lambda: self.on_click(modid))
-
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(f'setup mod for {self.profile}')
-        self.label.setText(f'setup mods for {self.profile}')
         for mod in listMod(self.profile):
-            self.add_card(mod)
+            self.add_card(mod[:-4])

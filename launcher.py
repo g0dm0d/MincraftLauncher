@@ -1,10 +1,11 @@
 import sqlite3
-import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QThreadPool
 
 
-from tools.accounts.auth import addAccount
+from game import run
+from launcherSettings import settingsUI
+from tools.accounts.accountInfo import getInfo
 from modsSerch import ModsSearchUI
 from tools.versions.minecraftConf import versionList
 
@@ -136,7 +137,6 @@ class Ui_Dialog(object):
             "    border: 0px solid #c2dbfe;\n"
             "}")
         self.Login.setObjectName("Login")
-        self.Login.addItem("")
         self.Settings = QtWidgets.QToolButton(Dialog)
         self.Settings.setGeometry(QtCore.QRect(470, 120, 81, 36))
         self.Settings.setObjectName("Settings")
@@ -194,7 +194,6 @@ class Ui_Dialog(object):
             "}")
         self.Version.setObjectName("Version")
 
-        self.Mods.clicked.connect(lambda: self.modsUI())
 
         self.widget_2.raise_()
         self.widget.raise_()
@@ -221,11 +220,17 @@ class Ui_Dialog(object):
         self.Launchver.setText(_translate("Dialog", "\"Launcher version"))
         self.null_2.setText(_translate("Dialog", "Null"))
 
-    def loginin(self):
-        self.threadpool.start(addAccount)
+    def play(self):
+        username,uuid, token = getInfo(self.Login.currentText())
+        print(self.Version.currentText())
+        self.threadpool.start(run(username, uuid, token, self.Version.currentText()))
+
 
     def setupButtons(self):
-        self.Play.clicked.connect(self.loginin)
+        self.Play.clicked.connect(lambda: self.play())
+        self.Settings.clicked.connect(lambda: self.settingsUI())
+        self.Mods.clicked.connect(lambda: self.modsUI())
+
 
     def accountscheck(self):
         con = sqlite3.connect("tools/accounts/accounts.db")
@@ -245,6 +250,15 @@ class Ui_Dialog(object):
         self.ui = ModsSearchUI()
         self.ui.setupUi(self.window)
         self.ui.scanVer()
+        self.window.show()
+
+
+    def settingsUI(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = settingsUI()
+        self.ui.setupUi(self.window)
+        self.ui.getVersion()
+        self.ui.getProfile()
         self.window.show()
 
 

@@ -117,7 +117,6 @@ class ModsSearchUI(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.modsManager.setText(_translate("Dialog", "Mods manager"))
         self.Searcbar.setPlaceholderText(_translate("Form", "Search.."))
         self.comboBox.setPlaceholderText(_translate("Form", "Version"))
         self.pushButton.setText(_translate("Form", "🔍"))
@@ -130,25 +129,25 @@ class ModsSearchUI(object):
     def add_card(self, name, modid, url):
         itemN = QtWidgets.QListWidgetItem() 
         widget = QtWidgets.QWidget()
-        image = QImage()
-        if len(url) != 0:
-            image.loadFromData(requests.get(url).content)
-        image = image
-        image_label = QLabel()
-        image_label.setPixmap(QPixmap(image).scaled(48, 48))
+        #image = QImage()
+        #if len(url) != 0:
+        #    image.loadFromData(requests.get(url).content)
+        #image_label = QLabel()
+        #image_label.setPixmap(QPixmap(image).scaled(48, 48))
 
         widgetText =  QtWidgets.QLabel(name)
         widgetButton =  QtWidgets.QPushButton("Download")
         widgetLayout = QtWidgets.QHBoxLayout()
-        widgetLayout.addWidget(image_label)
-        widgetLayout.addWidget(widgetText)
+        #widgetLayout.addWidget(image_label)
         widgetLayout.addWidget(widgetButton)
+        widgetLayout.addWidget(widgetText)
         widgetLayout.addStretch()
         
         widgetLayout.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
         widget.setLayout(widgetLayout)  
         itemN.setSizeHint(widget.sizeHint())    
         
+        #Add widget to QListWidget funList
         self.listWidget.addItem(itemN)
         self.listWidget.setItemWidget(itemN, widget)
         

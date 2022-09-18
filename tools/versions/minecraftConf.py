@@ -12,7 +12,8 @@ def createJson(path, version, name, javapath, arguments='-Xmx4G'):
            "location": path,
            "version": version,
            "javapath": javapath,
-           "arguments": arguments
+           "arguments": arguments,
+           "runner": version
         }]
     with open (os.path.join(mcDir,f'{name}.json'), "w+") as file:
         file.write(json.dumps(data))
@@ -39,3 +40,17 @@ def locationJson(name):
 def versionList():
     filelist= [file[:-5] for file in os.listdir(mcDir) if file.endswith('.json')]
     return filelist
+
+
+def runnerJson(name):
+    mainJson = json.loads(
+        Path(os.path.join(mcDir, f'{name}.json')).read_text())
+    return mainJson[0]['runner']
+
+
+def updateRunner(name, runner):
+    with open(os.path.join(mcDir, f'{name}.json'), 'r') as jsonFile:
+        data = json.load(jsonFile)
+    data[0]['runner'] = runner
+    with open(os.path.join(mcDir, f'{name}.json'), 'w') as jsonFile:
+        json.dump(data, jsonFile)
