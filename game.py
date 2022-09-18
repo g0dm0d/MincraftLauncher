@@ -93,7 +93,8 @@ def get_classpath(lib, mcDir):
 def run(username, uuid, token, name):
     clientJson = json.loads(
         Path(os.path.join(os.getenv('HOME'), '.cobalt', f'{name}.json')).read_text())
-    version=clientJson[0]['runner'][:-4]
+    version = clientJson[0]['runner'][:-4]
+    javapath = clientJson[0]['javapath']
     mcDir = clientJson[0]['location']
     resDir = os.path.join(os.getenv('HOME'), '.cobalt')
     nativesDir = os.path.join(resDir, 'versions', version, 'natives')
@@ -119,7 +120,7 @@ def run(username, uuid, token, name):
     debug(versionType)
     debug(assetIndex)
 
-    minecraft = ['/usr/bin/java',
+    minecraft = [javapath,
         f'-Djava.library.path={nativesDir}',
         '-Dminecraft.launcher.brand=custom-launcher',
         '-Dminecraft.launcher.version=2.1',
