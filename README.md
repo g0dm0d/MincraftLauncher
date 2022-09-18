@@ -1,2 +1,2 @@
-# EnelixLauncher
-open-source python minecraft launcher
+# Cobalt Client
+open-source python minecraft launcher for linux
