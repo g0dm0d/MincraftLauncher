@@ -103,7 +103,7 @@ def run(username, uuid, token, name):
     classPath = get_classpath(versionJson, resDir)
     mainClass = versionJson['mainClass']
     versionType = versionJson['type']
-    arguments=[clientJson[0]['arguments']]
+    arguments = clientJson[0]['arguments']
     try:
         dependence = versionJson['inheritsFrom']
         arguments+=versionJson['arguments']['game']
