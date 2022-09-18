@@ -23,7 +23,9 @@ def download(link, file_name, path, callback = None):
                     dl += len(data)
                     f.write(data)
                     done = int(50 * dl / total_length)
-                    callback(done)
+                    if callback != None:
+                        callback(done)
                     #sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50-done)) )    
                     #sys.stdout.flush()
-    callback(100)
+    if callback != None:
+        callback(100)

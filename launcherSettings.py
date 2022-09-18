@@ -105,4 +105,4 @@ class settingsUI(object):
 
 
     def minecraftInstall(self):
-        self.threadpool.globalInstance().start(lambda: downloadMinecraft(self.version.currentText(), self.name.text(), '/usr/bin/java', callback = self.progress))
+        self.threadpool.globalInstance().start(lambda: downloadMinecraft(self.version.currentText(), self.name.text(), '/usr/bin/java', callback = None))

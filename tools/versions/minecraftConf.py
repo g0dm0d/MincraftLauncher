@@ -38,8 +38,11 @@ def locationJson(name):
 
 
 def versionList():
-    filelist= [file[:-5] for file in os.listdir(mcDir) if file.endswith('.json')]
-    return filelist
+    try:
+        filelist= [file[:-5] for file in os.listdir(mcDir) if file.endswith('.json')]
+        return filelist
+    except:
+        return ['no profile']
 
 
 def runnerJson(name):
