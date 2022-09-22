@@ -3,7 +3,7 @@ from http.server import BaseHTTPRequestHandler
 import threading
 
 
-def mslog():
+def mslog() -> str:
     global code
     code = ''
 

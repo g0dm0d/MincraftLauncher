@@ -15,7 +15,7 @@ class Ui_Dialog(object):
         self.threadpool = QThreadPool()
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.setWindowModality(QtCore.Qt.NonModal)
+        Dialog.setWindowModality(QtCore.Qt.NonModal) # type: ignore
         Dialog.setEnabled(True)
         Dialog.resize(1029, 568)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
@@ -24,7 +24,7 @@ class Ui_Dialog(object):
         sizePolicy.setHeightForWidth(Dialog.sizePolicy().hasHeightForWidth())
         Dialog.setSizePolicy(sizePolicy)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../../../Downloads/Downloads/White_Candle_Cake_(lit)_JE3.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("../../../Downloads/Downloads/White_Candle_Cake_(lit)_JE3.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off) # type: ignore
         Dialog.setWindowIcon(icon)
         Dialog.setAutoFillBackground(False)
         Dialog.setStyleSheet("#comboBox{\n"
@@ -221,9 +221,9 @@ class Ui_Dialog(object):
         self.null_2.setText(_translate("Dialog", "Null"))
 
     def play(self):
-        username,uuid, token = getInfo(self.Login.currentText())
-        print(self.Version.currentText())
-        self.threadpool.start(run(username, uuid, token, self.Version.currentText()))
+        account = getInfo(self.Login.currentText())
+        if account.nick and account.uuid and account.token and self.Version.currentText() != None: # type: ignore
+            self.threadpool.start(run(account.nick, account.uuid, account.token, self.Version.currentText())) # type: ignore
 
 
     def setupButtons(self):

@@ -3,19 +3,19 @@ import requests
 import os
 
 
-from ..versions.minecraftConf import readJson, versionJson, locationJson
+from ..versions.minecraftConf import readJson
 from ..versions.download import download
 #'https://api.modrinth.com/v2/project/{mod}/version?loaders=["{modloader}"]&game_versions=["{gameVersion}"]'
 
 
 def modsLocation(profile):
-    location = locationJson(profile)
+    location = readJson(profile).location
     location = os.path.join(location, 'mods')
     return location
 
 
 def searchMod(mod, profile):
-    version = versionJson(profile)
+    version = readJson(profile).version
     req = requests.get(f'https://api.modrinth.com/v2/search?limit=20&index=relevance&query={mod}&\
             facets=[["categories:\'fabric\'"],["project_type:mod"],["versions:{version}"]]')
     modsFind = req.json()
@@ -26,7 +26,7 @@ def searchMod(mod, profile):
 
 
 def downloadMod(mod, profile):
-    version = versionJson(profile)
+    version = readJson(profile).version
     location = modsLocation(profile)
     req = requests.get(f'https://api.modrinth.com/v2/project/{mod}/version?loaders=["fabric"]&game_versions=["{version}"]',\
             f'{mod}.jar')

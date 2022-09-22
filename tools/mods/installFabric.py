@@ -1,5 +1,4 @@
 from pathlib import Path
-from traceback import print_tb
 import requests
 import subprocess
 import os
@@ -7,9 +6,10 @@ import json
 import shutil
 from xml.dom import minidom
 
-from ..versions.download import download
-from ..versions.minecraftConf import updateRunner, versionJson
 
+from ..versions import const
+from ..versions.download import download
+from ..versions.minecraftConf import updateRunner, readJson
 
 #https://meta.fabricmc.net/v2/versions/
 #https://meta.fabricmc.net/v2/versions/loader
@@ -17,7 +17,7 @@ from ..versions.minecraftConf import updateRunner, versionJson
 # 	"org.ow2.asm:asm-tree:9.3"
 
 def downloadLib(jsonfile, callback = None):
-    path = Path(os.path.join(os.getenv('HOME'), '.cobalt', 'libraries'))
+    path = const.libsDir
     for file in jsonfile['libraries']:
         liburl = file['url']
         libPath = file['name'].split(':')
@@ -28,10 +28,10 @@ def downloadLib(jsonfile, callback = None):
 
 
 def installFabric(name, callback = None):
-    version = versionJson(name)
+    version = readJson(name).version
     tree = (minidom.parseString(requests.get('https://maven.fabricmc.net/net/fabricmc/fabric-installer/maven-metadata.xml').content))
     fabversion = tree.getElementsByTagName('latest')[0].firstChild.nodeValue
-    mainDir = os.path.join(os.getenv('HOME'), '.cobalt')
+    mainDir = const.mcDir
     req = requests.get('https://meta.fabricmc.net/v2/versions/loader')
     fabricver = req.json()
     fabricver = fabricver[0]['version']

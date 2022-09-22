@@ -120,6 +120,7 @@ class ModsSearchUI(object):
         self.Searcbar.setPlaceholderText(_translate("Form", "Search.."))
         self.comboBox.setPlaceholderText(_translate("Form", "Version"))
         self.pushButton.setText(_translate("Form", "🔍"))
+        self.modsManager.setText(_translate("Form", "Mods manager"))
         self.label.setText(_translate("Form", "Mod manager design will be better in the future"))
 
     def on_click(self, mod):
@@ -168,7 +169,6 @@ class ModsSearchUI(object):
 
     def modsmanagerUI(self):
         self.window = QtWidgets.QMainWindow()
-        self.ui = ModsManagerUI()
-        self.ui.profile = self.comboBox.currentText()
+        self.ui = ModsManagerUI(self.comboBox.currentText())
         self.ui.setupUi(self.window)
         self.window.show()

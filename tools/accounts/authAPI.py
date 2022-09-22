@@ -5,7 +5,7 @@ import webbrowser
 from .httpserver import mslog
 
 
-def msauth():
+def msauth() -> str:
     #MAIN-TOKEN------------------------------------------------------
     webbrowser.open('https://login.live.com/oauth20_authorize.srf?client_id=1a4b9403-1f4d-46f3-9dcb-08aa6f0667e6&response_type=code&redirect_uri=http://localhost:9397&scope=XboxLive.signin%20offline_access&state=NOT_NEEDED', new=2)
     code = mslog()

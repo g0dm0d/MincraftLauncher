@@ -3,10 +3,11 @@ import os
 from pathlib import Path
 
 
-mcDir = os.path.join(os.getenv('HOME'), '.cobalt')
+from config import Config
+import const
 
 
-def createJson(path, version, name, javapath, arguments='-Xmx4G'):
+def createJson(path: str , version: str, name: str, javapath: str, arguments='-Xmx4G') -> None:
     data =[
         {
            "location": path,
@@ -15,45 +16,28 @@ def createJson(path, version, name, javapath, arguments='-Xmx4G'):
            "arguments": arguments,
            "runner": version
         }]
-    with open (os.path.join(mcDir,f'{name}.json'), "w+") as file:
+    with open (os.path.join(const.mcDir,f'{name}.json'), "w+") as file:
         file.write(json.dumps(data))
 
 
-def readJson(name):
+def readJson(name: str):
     mainJson = json.loads(
-        Path(os.path.join(mcDir, f'{name}.json')).read_text())
-    return mainJson[0]['location'], mainJson[0]['version']
+        Path(os.path.join(const.mcDir, f'{name}.json')).read_text())
+    return Config(mainJson[0]['location'], mainJson[0]['version'],\
+            mainJson[0]['javapath'], mainJson[0]['arguments'], mainJson[0]['runner'])
 
 
-def versionJson(name):
-    mainJson = json.loads(
-        Path(os.path.join(mcDir, f'{name}.json')).read_text())
-    return(mainJson[0]['version'])
-
-
-def locationJson(name):
-    mainJson = json.loads(
-        Path(os.path.join(mcDir, f'{name}.json')).read_text())
-    return(mainJson[0]['location'])
-
-
-def versionList():
+def versionList() -> list[str]:
     try:
-        filelist= [file[:-5] for file in os.listdir(mcDir) if file.endswith('.json')]
+        filelist= [file[:-5] for file in os.listdir(const.mcDir) if file.endswith('.json')]
         return filelist
     except:
         return ['no profile']
 
 
-def runnerJson(name):
-    mainJson = json.loads(
-        Path(os.path.join(mcDir, f'{name}.json')).read_text())
-    return mainJson[0]['runner']
-
-
-def updateRunner(name, runner):
-    with open(os.path.join(mcDir, f'{name}.json'), 'r') as jsonFile:
+def updateRunner(name: str, runner: str) -> None:
+    with open(os.path.join(const.mcDir, f'{name}.json'), 'r') as jsonFile:
         data = json.load(jsonFile)
     data[0]['runner'] = runner
-    with open(os.path.join(mcDir, f'{name}.json'), 'w') as jsonFile:
+    with open(os.path.join(const.mcDir, f'{name}.json'), 'w') as jsonFile:
         json.dump(data, jsonFile)

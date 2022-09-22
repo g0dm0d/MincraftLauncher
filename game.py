@@ -3,13 +3,17 @@ import os
 import platform
 from pathlib import Path
 import subprocess
-from sys import argv
+
+
+from tools.versions import const
+
 
 #version = 'fabric-loader-0.14.9-1.18.1'
 #username = 'test'
 #uuid = 'test'
 #token = 'test'
 #name = 'test'
+
 
 def debug(str):
     if os.getenv('DEBUG') != None:
@@ -92,11 +96,11 @@ def get_classpath(lib, mcDir):
 # i["downloads"]['artifact']['url'].split("/")
 def run(username, uuid, token, name):
     clientJson = json.loads(
-        Path(os.path.join(os.getenv('HOME'), '.cobalt', f'{name}.json')).read_text())
+        Path(os.path.join(const.mcDir, f'{name}.json')).read_text())
     version = clientJson[0]['runner'][:-4]
     javapath = clientJson[0]['javapath']
     mcDir = clientJson[0]['location']
-    resDir = os.path.join(os.getenv('HOME'), '.cobalt')
+    resDir = const.mcDir
     nativesDir = os.path.join(resDir, 'versions', version, 'natives')
     versionJson = json.loads(
         Path(os.path.join(resDir, 'versions', version, f'{version}.json')).read_text())
@@ -111,7 +115,7 @@ def run(username, uuid, token, name):
         Path(os.path.join(resDir, 'versions', dependence, f'{dependence}.json')).read_text())
         assetIndex = mainJson['assetIndex']['id']
         classPath = get_classpath(mainJson, resDir) + ':' + classPath
-        classPath = classPath.replace(f':/home/godmod/.cobalt/versions/{dependence}/{dependence}.jar', '')
+        classPath = classPath.replace(f':/.cobalt/versions/{dependence}/{dependence}.jar', '')
     except:
         assetIndex = versionJson['assetIndex']['id']
 

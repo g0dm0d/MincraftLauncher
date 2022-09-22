@@ -1,9 +1,6 @@
-import sys
 import os
 import requests
 from pathlib import Path
-from typing import List, Optional, Union
-
 
 
 def download(link, file_name, path, callback = None):

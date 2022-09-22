@@ -1,18 +1,17 @@
 from pathlib import Path
 import requests
 import os
+from typing import Optional
 
 
 from .download import download
+import const
 
 
-mcDir = os.path.join(os.getenv('HOME'), '.cobalt')
-
-
-def filename(link):
+def filename(link) -> str:
     return str(link).split('/')[-1]
 
-def mineverjson(version):
+def mineverjson(version) -> Optional[str]:
     req = requests.get('https://launchermeta.mojang.com/mc/game/version_manifest_v2.json')
     clientJson = req.json()
     for i in clientJson['versions']:
@@ -20,32 +19,29 @@ def mineverjson(version):
             return i['url']
 
 
-def getVersion():
+def getVersion() -> list[str]:
     req = requests.get('https://launchermeta.mojang.com/mc/game/version_manifest_v2.json')
     clientJson = req.json()
     versionlist = [version['id'] for version in clientJson['versions'] if version['type'] == 'release']
     return versionlist
 
 
-
-def minejson(jsonfile, path):
+def minejson(jsonfile, path) -> None:
     download(jsonfile, filename(jsonfile), path)
 
 
-def downloadObjects(jsonfile, callback = None): # hash
-    path = Path(os.path.join(os.getenv('HOME'), '.cobalt', 'assets', 'objects'))
+def downloadObjects(jsonfile, callback = None) -> None:
     for file in jsonfile['objects']:
         hash = jsonfile['objects'][file]['hash']
-        filePath = Path(os.path.join(path, hash[:2]))
+        filePath = Path(os.path.join(const.objectsDir, hash[:2]))
         if not Path(os.path.join(filePath, hash)).exists():
             download(f'http://resources.download.minecraft.net/{hash[:2]}/{hash}', hash, filePath, callback = callback)
 
 
-def downloadLib(jsonfile, callback = None):
-    path = Path(os.path.join(os.getenv('HOME'), '.cobalt', 'libraries'))
+def downloadLib(jsonfile, callback = None) -> None:
     for file in jsonfile['libraries']:
         libPath = file['downloads']['artifact']['path'].split('/')[:-1]
-        filePath = Path(os.path.join(path, *libPath))
+        filePath = Path(os.path.join(const.libsDir, *libPath))
         fileName = (file['downloads']['artifact']['path']).split('/')[-1]
         if not Path(os.path.join(filePath, fileName)).exists():
             download(file['downloads']['artifact']['url'], fileName, filePath)

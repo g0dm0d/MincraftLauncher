@@ -17,7 +17,8 @@ from tools.mods.modManager import listMod, toogleMod, modStatus
 
 
 class ModsManagerUI(object):
-    profile = ''
+    def __init__(self, profile: str) -> None:
+        self.profile = profile
 
 
     def on_click(self, mod):
