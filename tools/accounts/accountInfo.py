@@ -5,7 +5,7 @@ import os
 from typing import Optional
 
 
-from account import Account
+from .account import Account
 
 
 def accountinfo(token: str):

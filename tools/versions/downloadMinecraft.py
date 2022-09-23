@@ -3,7 +3,7 @@ import requests
 import os
 
 
-import const
+from . import const
 from .download import download
 from .getMinecraft import downloadLib, downloadObjects, mineverjson
 from .getMinecraft import filename

@@ -3,8 +3,8 @@ import os
 from pathlib import Path
 
 
-from config import Config
-import const
+from .config import Config
+from . import const
 
 
 def createJson(path: str , version: str, name: str, javapath: str, arguments='-Xmx4G') -> None:

@@ -5,7 +5,7 @@ from typing import Optional
 
 
 from .download import download
-import const
+from . import const
 
 
 def filename(link) -> str:
