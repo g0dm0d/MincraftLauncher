@@ -97,7 +97,7 @@ def get_classpath(lib, mcDir):
 def run(username, uuid, token, name):
     clientJson = json.loads(
         Path(os.path.join(const.mcDir, f'{name}.json')).read_text())
-    version = clientJson[0]['runner'][:-4]
+    version = clientJson[0]['runner']
     javapath = clientJson[0]['javapath']
     mcDir = clientJson[0]['location']
     resDir = const.mcDir
